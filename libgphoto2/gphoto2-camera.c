@@ -32,7 +32,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-#include <ltdl.h>
+/* #include <ltdl.h> */
 
 #include <gphoto2/gphoto2-result.h>
 #include <gphoto2/gphoto2-library.h>
@@ -40,7 +40,7 @@
 #include <gphoto2/gphoto2-port-locking.h>
 
 #include "libgphoto2/i18n.h"
-
+#include "libgphoto2/dll-preload.h"
 
 #define CAMERA_UNUSED(c,ctx)						\
 {									\
@@ -210,7 +210,8 @@ struct _CameraPrivateCore {
 	CameraAbilities a;
 
 	/* Library handle */
-	lt_dlhandle lh;
+	/* lt_dlhandle lh; */
+	struct camlib *lh;
 
 	char error[2048];
 
@@ -281,8 +282,8 @@ gp_camera_exit (Camera *camera, GPContext *context)
 	if (camera->pc->lh) {
 #if !defined(VALGRIND)
 		gpi_libltdl_lock();
-		lt_dlclose (camera->pc->lh);
-		lt_dlexit ();
+		/* lt_dlclose (camera->pc->lh); */
+		/* lt_dlexit (); */
 		gpi_libltdl_unlock();
 #endif
 		camera->pc->lh = NULL;
@@ -781,27 +782,30 @@ gp_camera_init (Camera *camera, GPContext *context)
 	/* Load the library. */
 	GP_LOG_D ("Loading '%s'...", camera->pc->a.library);
 	gpi_libltdl_lock();
-	lt_dlinit ();
-	camera->pc->lh = lt_dlopenext (camera->pc->a.library);
+	/* lt_dlinit (); */
+	/* camera->pc->lh = lt_dlopenext (camera->pc->a.library); */
+	camera->pc->lh = get_camlib_by_name(camera->pc->a.library);
 	gpi_libltdl_unlock();
 	if (!camera->pc->lh) {
 		gpi_libltdl_lock();
 		gp_context_error (context, _("Could not load required "
 			"camera driver '%s' (%s)."), camera->pc->a.library,
-			lt_dlerror ());
-		lt_dlexit ();
+			/* lt_dlerror ()); */
+			"unknown error");
+		/* lt_dlexit (); */
 		gpi_libltdl_unlock();
 		return (GP_ERROR_LIBRARY);
 	}
 
 	/* Initialize the camera */
 	gpi_libltdl_lock();
-	init_func = lt_dlsym (camera->pc->lh, "camera_init");
+	/* init_func = lt_dlsym (camera->pc->lh, "camera_init"); */
+	init_func = camera->pc->lh->fp_camera_init;
 	gpi_libltdl_unlock();
 	if (!init_func) {
 		gpi_libltdl_lock();
-		lt_dlclose (camera->pc->lh);
-		lt_dlexit ();
+		/* lt_dlclose (camera->pc->lh); */
+		/* lt_dlexit (); */
 		gpi_libltdl_unlock();
 		camera->pc->lh = NULL;
 		gp_context_error (context, _("Camera driver '%s' is "
@@ -814,8 +818,8 @@ gp_camera_init (Camera *camera, GPContext *context)
 		result = gp_port_open (camera->port);
 		if (result < 0) {
 			gpi_libltdl_lock();
-			lt_dlclose (camera->pc->lh);
-			lt_dlexit ();
+			/* lt_dlclose (camera->pc->lh); */
+			/* lt_dlexit (); */
 			gpi_libltdl_unlock();
 			camera->pc->lh = NULL;
 			return (result);
@@ -826,8 +830,8 @@ gp_camera_init (Camera *camera, GPContext *context)
 	if (result < 0) {
 		gp_port_close (camera->port);
 		gpi_libltdl_lock();
-		lt_dlclose (camera->pc->lh);
-		lt_dlexit ();
+		/* lt_dlclose (camera->pc->lh); */
+		/* lt_dlexit (); */
 		gpi_libltdl_unlock();
 		camera->pc->lh = NULL;
 		memset (camera->functions, 0, sizeof (CameraFunctions));

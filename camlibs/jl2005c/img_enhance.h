@@ -27,9 +27,9 @@
 
 
 int
-histogram(unsigned char *data, unsigned int size, int *htable_r,
+jl2005c_histogram(unsigned char *data, unsigned int size, int *htable_r,
 						int *htable_g, int *htable_b);
 int
-white_balance(unsigned char *data, unsigned int size, float saturation);
+jl2005c_white_balance(unsigned char *data, unsigned int size, float saturation);
 
 #endif /* !defined(CAMLIBS_JL2005C_IMG_ENHANCE_H) */

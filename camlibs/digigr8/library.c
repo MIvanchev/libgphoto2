@@ -312,7 +312,7 @@ get_file_func(CameraFilesystem *fs, const char *folder, const char *filename,
 		gp_gamma_fill_table (gtable, .65);
 		gp_gamma_correct_single(gtable,ptr,w*h);
 	} else
-		white_balance (ptr, w*h, 1.1);
+		digi_white_balance (ptr, w*h, 1.1);
 	gp_file_set_mime_type (file, GP_MIME_PPM);
 	gp_file_set_data_and_size (file, (char *)ppm, size);
 	/* Reset camera when done, for more graceful exit. */
@@ -399,7 +399,7 @@ camera_capture_preview(Camera *camera, CameraFile *file, GPContext *context)
 		gp_gamma_fill_table (gtable, .65);
 		gp_gamma_correct_single(gtable,ptr,w*h);
 	} else
-		white_balance(ptr, w * h, 1.1);
+		digi_white_balance(ptr, w * h, 1.1);
 	gp_file_set_mime_type(file, GP_MIME_PPM);
 	gp_file_set_data_and_size(file, (char *)ppm, size);
 	digi_reset(camera->port);

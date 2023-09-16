@@ -46,7 +46,7 @@ int digi_postprocess	(int width, int height, unsigned char* rgb);
 int digi_delete_all	(GPPort *, CameraPrivateLibrary *priv);
 
 int
-white_balance (unsigned char *data, unsigned int size, float saturation);
+digi_white_balance (unsigned char *data, unsigned int size, float saturation);
 
 
 #endif /* !defined(CAMLIBS_DIGIGR8_DIGIGR8_H) */

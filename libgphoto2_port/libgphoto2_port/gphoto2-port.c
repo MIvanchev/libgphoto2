@@ -32,7 +32,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <ltdl.h>
+/* #include <ltdl.h> */
 
 #include <gphoto2/gphoto2-port-result.h>
 #include <gphoto2/gphoto2-port-library.h>
@@ -42,6 +42,7 @@
 #include "libgphoto2_port/gphoto2-port-info.h"
 
 #include "libgphoto2_port/i18n.h"
+#include "libgphoto2_port/dll-preload.h"
 
 #define CHECK_RESULT(result) {int r=(result); if (r<0) return (r);}
 #define CHECK_SUPP(p,t,o) {if (!(o)) {gp_port_set_error ((p), _("The operation '%s' is not supported by this device"), (t)); return (GP_ERROR_NOT_SUPPORTED);}}
@@ -63,7 +64,7 @@ struct _GPPortPrivateCore {
 
 	struct _GPPortInfo info;	/**< Internal port information of this port. */
 	GPPortOperations *ops;	/**< Internal port operations. */
-	lt_dlhandle lh;		/**< Internal libtool library handle. */
+	struct iolib *lh;		/**< Internal libtool library handle. */
 };
 
 /**
@@ -161,34 +162,38 @@ gp_port_set_info (GPPort *port, GPPortInfo info)
 	if (port->pc->lh) {
 #if !defined(VALGRIND)
 		gpi_libltdl_lock();
-		lt_dlclose (port->pc->lh);
-		lt_dlexit ();
+		/* lt_dlclose (port->pc->lh); */
+		/* lt_dlexit (); */
 		gpi_libltdl_unlock();
 #endif
 	}
 
 	gpi_libltdl_lock();
-	lt_dlinit ();
-	port->pc->lh = lt_dlopenext (info->library_filename);
+	/* lt_dlinit (); */
+	/* port->pc->lh = lt_dlopenext (info->library_filename); */
+	port->pc->lh = get_iolib_by_name(info->library_filename);
 	gpi_libltdl_unlock();
 	if (!port->pc->lh) {
 		gpi_libltdl_lock();
-		GP_LOG_E ("Could not load '%s' ('%s').", info->library_filename, lt_dlerror ());
-		lt_dlexit ();
+		/* GP_LOG_E ("Could not load '%s' ('%s').", info->library_filename, lt_dlerror ()); */
+		GP_LOG_E ("Could not load '%s' ('%s').", info->library_filename, "unknown error");
+		/* lt_dlexit (); */
 		gpi_libltdl_unlock();
 		return (GP_ERROR_LIBRARY);
 	}
 
 	/* Load the operations */
 	gpi_libltdl_lock();
-	ops_func = lt_dlsym (port->pc->lh, "gp_port_library_operations");
+	/* ops_func = lt_dlsym (port->pc->lh, "gp_port_library_operations"); */
+        ops_func = port->pc->lh->fp_gp_port_library_operations;
 	gpi_libltdl_unlock();
 	if (!ops_func) {
 		gpi_libltdl_lock();
 		GP_LOG_E ("Could not find 'gp_port_library_operations' in '%s' ('%s')",
-			  info->library_filename, lt_dlerror ());
-		lt_dlclose (port->pc->lh);
-		lt_dlexit ();
+			  /* info->library_filename, lt_dlerror ()); */
+			  info->library_filename, "unknown error");
+		/* lt_dlclose (port->pc->lh); */
+		/* lt_dlexit (); */
 		gpi_libltdl_unlock();
 		port->pc->lh = NULL;
 		return (GP_ERROR_LIBRARY);
@@ -356,8 +361,8 @@ gp_port_free (GPPort *port)
 		if (port->pc->lh) {
 #if !defined(VALGRIND)
 			gpi_libltdl_lock();
-			lt_dlclose (port->pc->lh);
-			lt_dlexit ();
+			/* lt_dlclose (port->pc->lh); */
+			/* lt_dlexit (); */
 			gpi_libltdl_unlock();
 #endif
 			port->pc->lh = NULL;

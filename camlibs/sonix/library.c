@@ -386,7 +386,7 @@ get_file_func (CameraFilesystem *fs, const char *folder, const char *filename,
                                             SAKAR_AVI_FRAME_HEADER_LENGTH,
                                                             BAYER_TILE_GRBG);
 				}
-				white_balance(ptr+SAKAR_AVI_FRAME_HEADER_LENGTH,
+				sonix_white_balance(ptr+SAKAR_AVI_FRAME_HEADER_LENGTH,
 						w * h, 1.2);
 				gp_file_append(file, (char *)ptr,
 				    3*frame_size+
@@ -442,8 +442,8 @@ get_file_func (CameraFilesystem *fs, const char *folder, const char *filename,
                         gp_ahd_decode(p_data, w, h, ptr, BAYER_TILE_RGGB);
 		}
 		free (p_data);
-		white_balance(ptr, w * h, 1.2);
-		GP_DEBUG("white_balance run on photo number %03d \n", k+1);
+		sonix_white_balance(ptr, w * h, 1.2);
+		GP_DEBUG("sonix_white_balance run on photo number %03d \n", k+1);
 		gp_file_set_mime_type (file, GP_MIME_PPM);
 		gp_file_set_data_and_size (file, (char *)ppm, size);
 		free (data);

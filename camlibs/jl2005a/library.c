@@ -50,7 +50,7 @@
 
 #define GP_MODULE "jl2005a"
 
-struct {
+static struct {
 	char *name;
 	CameraDriverStatus status;
 	unsigned short idVendor;

@@ -49,6 +49,9 @@
 #include "pslr_model.h"
 #include "pslr.h"
 
+static char *shexdump(uint8_t *buf, uint32_t bufLen);
+static void hexdump(uint8_t *buf, uint32_t bufLen);
+
 static uint8_t lastbuf[MAX_STATUS_BUF_SIZE];
 static int first = 1;
 static char *jsontext=NULL;

@@ -723,7 +723,7 @@ static void resync(struct jdec_private *priv)
  *
  * Before calling any other functions, an object need to be called.
  */
-struct jdec_private *tinyjpeg_init(void)
+struct jdec_private *ax203_tinyjpeg_init(void)
 {
   struct jdec_private *priv;
 
@@ -738,7 +738,7 @@ struct jdec_private *tinyjpeg_init(void)
  *
  * No others function can be called after this one.
  */
-void tinyjpeg_free(struct jdec_private *priv)
+void ax203_tinyjpeg_free(struct jdec_private *priv)
 {
   int i;
 
@@ -755,7 +755,7 @@ void tinyjpeg_free(struct jdec_private *priv)
  * Check if the jpeg can be decoded with this jpeg decoder.
  * Fill some table used for preprocessing.
  */
-int tinyjpeg_parse_header(struct jdec_private *priv, const unsigned char *buf, unsigned int size)
+int ax203_tinyjpeg_parse_header(struct jdec_private *priv, const unsigned char *buf, unsigned int size)
 {
   const unsigned char *stream = buf;
   struct component *c;
@@ -848,7 +848,7 @@ static const convert_colorspace_fct convert_colorspace_rgb24[4] = {
  *
  * Note: components will be automaticaly allocated if no memory is attached.
  */
-int tinyjpeg_decode(struct jdec_private *priv)
+int ax203_tinyjpeg_decode(struct jdec_private *priv)
 {
   unsigned int x, y, xstride_by_mcu, ystride_by_mcu;
   unsigned int bytes_per_blocklines[3], bytes_per_mcu[3];
@@ -926,18 +926,18 @@ int tinyjpeg_decode(struct jdec_private *priv)
   return 0;
 }
 
-const char *tinyjpeg_get_errorstring(struct jdec_private *priv)
+const char *ax203_tinyjpeg_get_errorstring(struct jdec_private *priv)
 {
   return priv->error_string;
 }
 
-void tinyjpeg_get_size(struct jdec_private *priv, unsigned int *width, unsigned int *height)
+void ax203_tinyjpeg_get_size(struct jdec_private *priv, unsigned int *width, unsigned int *height)
 {
   *width = priv->width;
   *height = priv->height;
 }
 
-int tinyjpeg_get_components(struct jdec_private *priv, unsigned char **components)
+int ax203_tinyjpeg_get_components(struct jdec_private *priv, unsigned char **components)
 {
   int i;
   for (i=0; i<COMPONENTS && priv->components[i]; i++)
@@ -945,7 +945,7 @@ int tinyjpeg_get_components(struct jdec_private *priv, unsigned char **component
   return 0;
 }
 
-int tinyjpeg_set_components(struct jdec_private *priv, unsigned char **components, unsigned int ncomponents)
+int ax203_tinyjpeg_set_components(struct jdec_private *priv, unsigned char **components, unsigned int ncomponents)
 {
   unsigned int i;
   if (ncomponents > COMPONENTS)

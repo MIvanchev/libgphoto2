@@ -7,7 +7,7 @@ usb_la_CPPFLAGS = \
 	$(AM_CPPFLAGS) \
 	$(INTL_CFLAGS) \
 	$(LIBUSB_CFLAGS) \
-	$(CPPFLAGS)
+	$(CPPFLAGS) -Dgp_port_library_type=usb_gp_port_library_type -Dgp_port_library_list=usb_gp_port_library_list -Dgp_port_library_operations=usb_gp_port_library_operations
 usb_la_DEPENDENCIES = $(iolib_dependencies)
 usb_la_LIBADD = $(iolib_libadd)
 usb_la_LIBADD += $(LIBUSB_LIBS)	$(INTLLIBS)

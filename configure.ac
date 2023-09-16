@@ -245,8 +245,7 @@ LT_PREREQ([2.4.2])
 dnl Disable building static library, as no one uses it anyway.
 m4_pattern_forbid([^LT_INIT])dnl
 LT_INIT([
-  disable-static
-  dlopen
+  disable-shared
   win32-dll
 ])
 dnl
@@ -380,6 +379,11 @@ GP_CHECK_LIBRARY([LIBGD],[gdlib],[>= 2.0],[gd.h],[gdImageCreateTrueColor],[
 
 ],[],[default-on],[http://www.libgd.org/])
 GP_CONFIG_MSG([libGD conversion support],[${have_LIBGD}])
+
+AC_SUBST([LIBGD_LIBS])
+AC_SUBST([LIBJPEG_LIBS])
+AC_SUBST([LIBXML2_LIBS])
+AC_SUBST([LIBCURL_LIBS])
 
 dnl ---------------------------------------------------------------------------
 dnl Checks for header files.

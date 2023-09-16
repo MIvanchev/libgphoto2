@@ -12,7 +12,7 @@ vusb_la_CPPFLAGS = \
 	$(AM_CPPFLAGS) \
 	$(INTL_CFLAGS) \
         $(LIBEXIF_CFLAGS) \
-	$(CPPFLAGS)
+	$(CPPFLAGS) -Dgp_port_library_type=vusb_gp_port_library_type -Dgp_port_library_list=vusb_gp_port_library_list -Dgp_port_library_operations=vusb_gp_port_library_operations
 vusb_la_DEPENDENCIES = $(iolib_dependencies)
 vusb_la_LIBADD = $(iolib_libadd)
 vusb_la_LIBADD += $(INTLLIBS) $(LIBEXIF_LIBS)

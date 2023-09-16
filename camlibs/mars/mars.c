@@ -386,7 +386,7 @@ mars_routine (Info *info, GPPort *port, char param, int n)
  */
 
 int
-histogram (unsigned char *data, unsigned int size, int *htable_r, int *htable_g, int *htable_b)
+mars_histogram (unsigned char *data, unsigned int size, int *htable_r, int *htable_g, int *htable_b)
 {
 	unsigned int x;
 	/* Initializations */
@@ -418,7 +418,7 @@ mars_white_balance (unsigned char *data, unsigned int size, float saturation,
 
 	/* ------------------- GAMMA CORRECTION ------------------- */
 
-	histogram(data, size, htable_r, htable_g, htable_b);
+	mars_histogram(data, size, htable_r, htable_g, htable_b);
 	x = 1;
 	for (r = 48; r < 208; r++)
 	{
@@ -442,7 +442,7 @@ mars_white_balance (unsigned char *data, unsigned int size, float saturation,
 
 	/* ---------------- BRIGHT DOTS ------------------- */
 	max = size / 200;
-	histogram(data, size, htable_r, htable_g, htable_b);
+	mars_histogram(data, size, htable_r, htable_g, htable_b);
 
 	for (r=0xfe, x=0; (r > 32) && (x < max); r--)
 		x += htable_r[r];
@@ -483,7 +483,7 @@ mars_white_balance (unsigned char *data, unsigned int size, float saturation,
 	}
 	/* ---------------- DARK DOTS ------------------- */
 	max = size / 200;  /*  1/200 = 0.5%  */
-	histogram(data, size, htable_r, htable_g, htable_b);
+	mars_histogram(data, size, htable_r, htable_g, htable_b);
 
 	for (r=0, x=0; (r < 96) && (x < max); r++)
 		x += htable_r[r];

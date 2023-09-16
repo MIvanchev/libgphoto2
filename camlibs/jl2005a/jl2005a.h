@@ -42,7 +42,7 @@ int jl2005a_init              (Camera *camera, GPPort *port,
 int jl2005a_get_pic_data_size (GPPort *port, int n);
 int jl2005a_get_pic_width (GPPort *port);
 int jl2005a_get_pic_height (GPPort *port);
-int set_usb_in_endpoint	     (Camera *camera, int inep);
+int jl2005a_set_usb_in_endpoint	     (Camera *camera, int inep);
 int jl2005a_read_picture_data ( Camera *camera,
 				GPPort *port, unsigned char *data,
 				unsigned int size);

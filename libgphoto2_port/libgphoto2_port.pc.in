@@ -4,10 +4,11 @@ libdir=@libdir@
 includedir=@includedir@
 VERSION=@VERSION@
 driverdir=@iolibdir@
+libs=@IOLIB_LIST_LINKER@ @SERIAL_LIBS@ @LIBEXIF_LIBS@ @LIBUSB_LIBS@ @LIBUSB1_LIBS@
 
 Name: libgphoto2_port
 Description: Device-independent access to serial, USB, and other ports
 URL: http://gphoto.org/proj/libgphoto2/
 Version: @VERSION@
-Libs: -L${libdir} -lgphoto2_port -lm
+Libs: -L${libdir} -L${driverdir} -lgphoto2_port -lm ${libs} -lgphoto2_port
 Cflags: -I${includedir} -I${includedir}/gphoto2

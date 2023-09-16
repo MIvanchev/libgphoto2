@@ -49,15 +49,15 @@ extern "C" {
 
 struct jdec_private;
 
-struct jdec_private *tinyjpeg_init(void);
-void tinyjpeg_free(struct jdec_private *priv);
+struct jdec_private *ax203_tinyjpeg_init(void);
+void ax203_tinyjpeg_free(struct jdec_private *priv);
 
-int tinyjpeg_parse_header(struct jdec_private *priv, const unsigned char *buf, unsigned int size);
-int tinyjpeg_decode(struct jdec_private *priv);
-const char *tinyjpeg_get_errorstring(struct jdec_private *priv);
-void tinyjpeg_get_size(struct jdec_private *priv, unsigned int *width, unsigned int *height);
-int tinyjpeg_get_components(struct jdec_private *priv, unsigned char **components);
-int tinyjpeg_set_components(struct jdec_private *priv, unsigned char **components, unsigned int ncomponents);
+int ax203_tinyjpeg_parse_header(struct jdec_private *priv, const unsigned char *buf, unsigned int size);
+int ax203_tinyjpeg_decode(struct jdec_private *priv);
+const char *ax203_tinyjpeg_get_errorstring(struct jdec_private *priv);
+void ax203_tinyjpeg_get_size(struct jdec_private *priv, unsigned int *width, unsigned int *height);
+int ax203_tinyjpeg_get_components(struct jdec_private *priv, unsigned char **components);
+int ax203_tinyjpeg_set_components(struct jdec_private *priv, unsigned char **components, unsigned int ncomponents);
 
 #ifdef __cplusplus
 }

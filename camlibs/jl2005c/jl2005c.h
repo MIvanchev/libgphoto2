@@ -50,7 +50,7 @@ int jl2005c_get_pic_data_size (CameraPrivateLibrary *priv, Info *table, int n);
 unsigned long jl2005c_get_start_of_photo (CameraPrivateLibrary *priv,
 						Info *table, unsigned int n);
 
-int set_usb_in_endpoint       (Camera *camera, int inep);
+int jl2005c_set_usb_in_endpoint       (Camera *camera, int inep);
 int jl2005c_read_data  (GPPort *port, char *data, int size);
 int jl2005c_reset (Camera *camera, GPPort *port);
 int jl2005c_delete_all (Camera *camera, GPPort *port);

@@ -474,8 +474,10 @@ dnl ---------------------------------------------------------------------------
 AC_SUBST([IOLIB_LIST])
 for x in ${IOLIB_LIST}; do
     IOLIB_LTLIST="${IOLIB_LTLIST} ${x}.la"
+    IOLIB_LIST_LINKER="${IOLIB_LIST_LINKER} -l:${x}.a"
 done
 AC_SUBST([IOLIB_LTLIST])
+AC_SUBST([IOLIB_LIST_LINKER])
 
 sorted_iolib_list="$(echo "${IOLIB_LIST}" | tr ' ' '\n' | sort | ${SED} '/^$/d' | tr '\n' ' ' | ${SED} 's/ $//')"
 AC_DEFINE_UNQUOTED([IOLIB_LIST], ["${sorted_iolib_list}"],
@@ -540,6 +542,9 @@ AC_SUBST([AM_CXXFLAGS])
 # LDFLAGS: Linker flags
 AC_SUBST([AM_LDFLAGS])
 
+AC_SUBST([LIBEXIF_LIBS])
+AC_SUBST([LIBUSB_LIBS])
+AC_SUBST([LIBUSB1_LIBS])
 
 # ---------------------------------------------------------------------------
 # Create output files

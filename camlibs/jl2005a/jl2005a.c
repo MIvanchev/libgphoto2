@@ -107,7 +107,7 @@ jl2005a_get_pic_height (GPPort *port)
 }
 
 int
-set_usb_in_endpoint	(Camera *camera, int inep)
+jl2005a_set_usb_in_endpoint	(Camera *camera, int inep)
 {
 	GPPortSettings settings;
 	gp_port_get_settings ( camera ->port, &settings);
@@ -146,7 +146,7 @@ jl2005a_read_picture_data (Camera *camera, GPPort *port,
         gp_port_write (port, "\xa2\x08", 2);
 
 	/* Switch the inep over to 0x81. */
-	set_usb_in_endpoint	(camera, 0x81);
+	jl2005a_set_usb_in_endpoint	(camera, 0x81);
 	while (size > maxdl) {
 		ret = gp_port_read(port, (char *)to_read, maxdl);
 		if (ret < GP_OK) return ret;
@@ -158,7 +158,7 @@ jl2005a_read_picture_data (Camera *camera, GPPort *port,
 	if (ret < GP_OK) return ret;
 	if ((unsigned int)ret < size) return GP_ERROR;
 	/* Switch the inep back to 0x84. */
-	set_usb_in_endpoint	(camera, 0x84);
+	jl2005a_set_usb_in_endpoint	(camera, 0x84);
 	return GP_OK;
 }
 

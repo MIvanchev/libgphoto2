@@ -117,6 +117,6 @@ struct jdec_private
 };
 
 #define IDCT tinyjpeg_idct_float
-void tinyjpeg_idct_float (struct component *compptr, uint8_t *output_buf, int stride);
+void ax203_tinyjpeg_idct_float (struct component *compptr, uint8_t *output_buf, int stride);
 
 #endif /* !defined(CAMLIBS_AX203_TINYJPEG_INTERNAL_H) */

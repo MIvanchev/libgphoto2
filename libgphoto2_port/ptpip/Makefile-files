@@ -6,7 +6,7 @@ ptpip_la_LDFLAGS = $(iolib_ldflags)
 ptpip_la_CPPFLAGS = \
 	$(AM_CPPFLAGS) \
 	$(INTL_CFLAGS) \
-	$(CPPFLAGS) 
+	$(CPPFLAGS) -Dgp_port_library_type=ptpip_gp_port_library_type -Dgp_port_library_list=ptpip_gp_port_library_list -Dgp_port_library_operations=ptpip_gp_port_library_operations
 ptpip_la_DEPENDENCIES = $(iolib_dependencies)
 ptpip_la_LIBADD = $(iolib_libadd) $(INTLLIBS)
 ptpip_la_SOURCES = ptpip/ptpip.c

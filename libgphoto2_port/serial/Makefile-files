@@ -6,7 +6,7 @@ serial_la_LDFLAGS = $(iolib_ldflags)
 serial_la_CPPFLAGS = \
 	$(AM_CPPFLAGS) \
 	$(INTL_CFLAGS) \
-	$(CPPFLAGS)
+	$(CPPFLAGS) -Dgp_port_library_type=serial_gp_port_library_type -Dgp_port_library_list=serial_gp_port_library_list -Dgp_port_library_operations=serial_gp_port_library_operations
 serial_la_DEPENDENCIES = $(iolib_dependencies)
 serial_la_LIBADD = $(iolib_libadd)
 serial_la_LIBADD += $(SERIAL_LIBS) $(INTLLIBS)

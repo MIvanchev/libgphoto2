@@ -76,3 +76,55 @@ libgphoto2_port_la_SOURCES      += gphoto2-port-result.c
 libgphoto2_port_la_DEPENDENCIES += $(top_srcdir)/gphoto2/gphoto2-port-locking.h
 libgphoto2_port_la_DEPENDENCIES += $(top_srcdir)/gphoto2/gphoto2-port-version.h
 libgphoto2_port_la_DEPENDENCIES += $(top_srcdir)/gphoto2/gphoto2-port-library.h
+
+libgphoto2_port_la_SOURCES      += dll-preload.h
+
+BUILT_SOURCES = dll-preload.h
+
+CLEANFILES = dll-preload.h
+
+dll-preload.h:
+	$(AM_V_at)rm -f $@
+	$(AM_V_at)echo "#ifndef __DLL_PRELOAD_H__" >> $@
+	$(AM_V_at)echo "#define __DLL_PRELOAD_H__" >> $@
+	$(AM_V_at)echo >> $@
+	$(AM_V_at)echo "struct iolib {" >> $@
+	$(AM_V_at)echo "   const char *name;" >> $@
+	$(AM_V_at)echo "   const GPPortLibraryType fp_gp_port_library_type;" >> $@
+	$(AM_V_at)echo "   const GPPortLibraryList fp_gp_port_library_list;" >> $@
+	$(AM_V_at)echo "   const GPPortLibraryOperations fp_gp_port_library_operations;" >> $@
+	$(AM_V_at)echo "};" >> $@
+	$(AM_V_at)echo >> $@
+	$(AM_V_at)echo "extern struct iolib iolibs[];" >> $@
+	$(AM_V_at)echo >> $@
+	echo "extern struct iolib *get_iolib_by_name(const char *name);" >> $@
+	$(AM_V_at)echo >> $@
+	$(AM_V_at)echo "#ifdef DEFINE_IOLIBS" >> $@
+	$(AM_V_at)echo >> $@
+	$(AM_V_at)list="$(IOLIB_LIST)"; for be in $$list; do be=$${be%.la}; \
+	echo "extern GPPortType $${be}_gp_port_library_type(void);" >> $@; \
+	echo "extern int $${be}_gp_port_library_list(GPPortInfoList *list);" >> $@; \
+	echo "extern GPPortOperations *$${be}_gp_port_library_operations(void);" >> $@; \
+	echo >> $@; \
+	done
+	$(AM_V_at)echo "struct iolib iolibs[] = {" >> $@
+	$(AM_V_at)list="$(IOLIB_LIST)"; for be in $$list; do be=$${be%.la}; \
+	echo "    {\"$$be.la\", $${be}_gp_port_library_type, $${be}_gp_port_library_list, $${be}_gp_port_library_operations}," >> $@; \
+	done
+	$(AM_V_at)echo "    { NULL, NULL, NULL, NULL }" >> $@
+	$(AM_V_at)echo "};" >> $@
+	$(AM_V_at)echo >> $@
+	$(AM_V_at)echo "struct iolib *get_iolib_by_name(const char *name) {" >> $@
+	$(AM_V_at)echo "    struct iolib *lib;" >> $@
+	$(AM_V_at)echo "    for (lib = iolibs; lib->name; lib++) {" >> $@
+	$(AM_V_at)echo "        if (!strcmp(lib->name, name)) {" >> $@
+	$(AM_V_at)echo "            break;" >> $@
+	$(AM_V_at)echo "        }" >> $@
+	$(AM_V_at)echo "    }" >> $@
+	$(AM_V_at)echo "    return lib;" >> $@
+	$(AM_V_at)echo "}" >> $@
+	$(AM_V_at)echo >> $@
+	$(AM_V_at)echo "#endif // DEFINE_IOLIBS" >> $@
+	$(AM_V_at)echo >> $@
+	$(AM_V_at)echo "#endif // __DLL_PRELOAD_H__" >> $@
+

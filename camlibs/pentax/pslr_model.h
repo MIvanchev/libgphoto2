@@ -206,8 +206,8 @@ typedef uint32_t (*get_uint32_func)(uint8_t *buf);
 typedef uint16_t (*get_uint16_func)(const uint8_t *buf);
 typedef int32_t (*get_int32_func)(uint8_t *buf);
 
-char *shexdump(uint8_t *buf, uint32_t bufLen);
-void hexdump(uint8_t *buf, uint32_t bufLen);
+/* char *shexdump(uint8_t *buf, uint32_t bufLen); */
+/* void hexdump(uint8_t *buf, uint32_t bufLen); */
 void hexdump_debug(uint8_t *buf, uint32_t bufLen);
 const char* int_to_binary( uint16_t x );
 

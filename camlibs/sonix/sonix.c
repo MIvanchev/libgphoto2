@@ -496,7 +496,7 @@ histogram (unsigned char *data, unsigned int size, int *htable_r,
 
 
 int
-white_balance (unsigned char *data, unsigned int size, float saturation)
+sonix_white_balance (unsigned char *data, unsigned int size, float saturation)
 {
 	unsigned int x, max;
 	int r, g, b, d;

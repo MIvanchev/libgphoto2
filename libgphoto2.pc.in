@@ -4,6 +4,7 @@ libdir=@libdir@
 includedir=@includedir@
 VERSION=@VERSION@
 driverdir=@camlibdir@
+libs=@GP_CAMLIB_SET_LINKER@ -lgphoto2 @LIBWS232_LIBS@ @MMAP_LIBS@ @LIBJPEG_LIBS@ @LIBXML2_LIBS@ @LIBCURL_LIBS@ @LIBGD_LIBS@
 
 Name: libgphoto2
 Description: Library for easy access to digital cameras
@@ -11,5 +12,5 @@ URL: http://gphoto.org/proj/libgphoto2/
 Version: @VERSION@
 Requires: libgphoto2_port >= 0.12.1
 Requires.private: @REQUIREMENTS_FOR_LIBEXIF@
-Libs: -L${libdir} -lgphoto2 -lm
+Libs: -L${libdir} -L${driverdir} -lgphoto2 -lm ${libs} -lgphoto2
 Cflags: -I${includedir} -I${includedir}/gphoto2

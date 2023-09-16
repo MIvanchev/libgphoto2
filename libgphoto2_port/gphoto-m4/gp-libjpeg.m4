@@ -128,7 +128,7 @@ libjpeg not found despite LIBJPEG_CFLAGS and/or LIBJPEG_LIBS being set.
   ])
 
   AS_VAR_IF([have_libjpeg], [no], [dnl
-    PKG_CHECK_MODULES([LIBJPEG], [libjpeg], [dnl
+    PKG_CHECK_MODULES_STATIC([LIBJPEG], [libjpeg], [dnl
       AC_MSG_CHECKING([linking with libjpeg works])
       GP_LINK_LIBJPEG_IFELSE([dnl
         have_libjpeg=yes

@@ -39,7 +39,7 @@
 #warning We need regex.h, but it has not been detected.
 #endif
 
-#include <ltdl.h>
+/* #include <ltdl.h> */
 
 #include <gphoto2/gphoto2-port-result.h>
 #include <gphoto2/gphoto2-port-library.h>
@@ -48,7 +48,9 @@
 
 #include "libgphoto2_port/gphoto2-port-info.h"
 #include "libgphoto2_port/i18n.h"
-
+#define DEFINE_IOLIBS
+#include "libgphoto2_port/dll-preload.h"
+#undef DEFINE_IOLIBS
 
 /**
  * \internal GPPortInfoList:
@@ -229,10 +231,11 @@ gp_port_info_list_append (GPPortInfoList *list, GPPortInfo info)
 
 
 static int
-foreach_func (const char *filename, lt_ptr data)
+foreach_func (const char *filename, void *data)
 {
 	GPPortInfoList *list = data;
-	lt_dlhandle lh;
+	/* lt_dlhandle lh; */
+	struct iolib *lh;
 	GPPortLibraryType lib_type;
 	GPPortLibraryList lib_list;
 	GPPortType type;
@@ -241,18 +244,23 @@ foreach_func (const char *filename, lt_ptr data)
 
 	GP_LOG_D ("Called for filename '%s'.", filename );
 
-	lh = lt_dlopenext (filename);
+	/* lh = lt_dlopenext (filename); */
+	lh = get_iolib_by_name(filename);
 	if (!lh) {
-		GP_LOG_D ("Could not load '%s': '%s'.", filename, lt_dlerror ());
+		/* GP_LOG_D ("Could not load '%s': '%s'.", filename, lt_dlerror ()); */
+		GP_LOG_D ("Could not load '%s': '%s'.", filename, "unknown error");
 		return (0);
 	}
 
-	lib_type = lt_dlsym (lh, "gp_port_library_type");
-	lib_list = lt_dlsym (lh, "gp_port_library_list");
+	/* lib_type = lt_dlsym (lh, "gp_port_library_type"); */
+	/* lib_list = lt_dlsym (lh, "gp_port_library_list"); */
+	lib_type = lh->fp_gp_port_library_type;
+	lib_list = lh->fp_gp_port_library_list;
 	if (!lib_type || !lib_list) {
 		GP_LOG_D ("Could not find some functions in '%s': '%s'.",
-			filename, lt_dlerror ());
-		lt_dlclose (lh);
+			/* filename, lt_dlerror ()); */
+			filename, "unknown error");
+		/* lt_dlclose (lh); */
 		return (0);
 	}
 
@@ -262,13 +270,13 @@ foreach_func (const char *filename, lt_ptr data)
 			break;
 	if (j != list->count) {
 		GP_LOG_D ("'%s' already loaded", filename);
-		lt_dlclose (lh);
+		/* lt_dlclose (lh); */
 		return (0);
 	}
 
 	result = lib_list (list);
 #if !defined(VALGRIND)
-	lt_dlclose (lh);
+	/* lt_dlclose (lh); */
 #endif
 	if (result < 0) {
 		GP_LOG_E ("Error during assembling of port list: '%s' (%d).",
@@ -293,6 +301,19 @@ foreach_func (const char *filename, lt_ptr data)
 	return (0);
 }
 
+static int fake_lt_dlforeachfile (const char *search_path,
+                                  int (*func) (const char *filename, void * data),
+                                  void * data)
+{
+    int ret = 0;
+    struct iolib *lib;
+    for (lib = iolibs; lib->name; lib++) {
+        if ((ret = func(lib->name, data)) != 0) {
+            break;
+        }
+    }
+    return ret;
+}
 
 /**
  * \brief Load system ports
@@ -317,10 +338,11 @@ gp_port_info_list_load (GPPortInfoList *list)
 
 	GP_LOG_D ("Using ltdl to load io-drivers from '%s'...", iolibs);
 	gpi_libltdl_lock();
-	lt_dlinit ();
-	lt_dladdsearchdir (iolibs);
-	result = lt_dlforeachfile (iolibs, foreach_func, list);
-	lt_dlexit ();
+	/* lt_dlinit (); */
+	/* lt_dladdsearchdir (iolibs); */
+	/* result = lt_dlforeachfile (iolibs, foreach_func, list); */
+	result = fake_lt_dlforeachfile (iolibs, foreach_func, list);
+	/* lt_dlexit (); */
 	gpi_libltdl_unlock();
 	if (result < 0)
 		return (result);

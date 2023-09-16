@@ -7,7 +7,7 @@ disk_la_CPPFLAGS = \
 	$(AM_CPPFLAGS) \
 	$(INTL_CFLAGS) \
 	$(LIBUSB_CFLAGS) \
-	$(CPPFLAGS)
+	$(CPPFLAGS) -Dgp_port_library_type=disk_gp_port_library_type -Dgp_port_library_list=disk_gp_port_library_list -Dgp_port_library_operations=disk_gp_port_library_operations
 disk_la_DEPENDENCIES = $(iolib_dependencies)
 disk_la_LIBADD = $(iolib_libadd)
 disk_la_LIBADD += $(INTLLIBS)

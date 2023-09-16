@@ -140,7 +140,7 @@ jl2005bcd_decompress (unsigned char *output, unsigned char *input,
 				"255\n",
 				thumbnail_width,
 				thumbnail_height);
-			white_balance (out, thumbnail_width * thumbnail_height,
+			jl2005c_white_balance (out, thumbnail_width * thumbnail_height,
 									1.6);
 			memcpy(output + out_headerlen, out,
 				thumbnail_width * thumbnail_height * 3);
@@ -283,7 +283,7 @@ jl2005bcd_decompress (unsigned char *output, unsigned char *input,
 		free (out);
 		return ret;
 	}
-	white_balance (out, width*height, 1.6);
+	jl2005c_white_balance (out, width*height, 1.6);
 
 	out_headerlen = snprintf((char *)output, 256,
 				"P6\n"

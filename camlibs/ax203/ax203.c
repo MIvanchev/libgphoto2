@@ -1098,7 +1098,7 @@ ax203_decode_image(Camera *camera, char *src, int src_size, int **dest)
 		   handle the AX206' custom JPEG format (the AX3003 uses
 		   normal JPEG compression). */
 		if (!camera->pl->jdec) {
-			camera->pl->jdec = tinyjpeg_init ();
+			camera->pl->jdec = ax203_tinyjpeg_init ();
 			if (!camera->pl->jdec)
 				return GP_ERROR_NO_MEMORY;
 		}
@@ -1111,16 +1111,16 @@ ax203_decode_image(Camera *camera, char *src, int src_size, int **dest)
 			htobe16a(src + 2, height);
 			row_skip = (width - camera->pl->width) * 3;
 		}
-		ret = tinyjpeg_parse_header (camera->pl->jdec,
+		ret = ax203_tinyjpeg_parse_header (camera->pl->jdec,
 					     (unsigned char *)src, src_size);
 		if (ret) {
 			gp_log (GP_LOG_ERROR, "ax203",
 				"Error parsing header: %s",
-				tinyjpeg_get_errorstring (camera->pl->jdec));
+				ax203_tinyjpeg_get_errorstring (camera->pl->jdec));
 			return GP_ERROR_CORRUPTED_DATA;
 		}
 		if (!row_skip) {
-			tinyjpeg_get_size (camera->pl->jdec, &width, &height);
+			ax203_tinyjpeg_get_size (camera->pl->jdec, &width, &height);
 			if (width  != camera->pl->width ||
 			    height != camera->pl->height) {
 				gp_log (GP_LOG_ERROR, "ax203",
@@ -1130,14 +1130,14 @@ ax203_decode_image(Camera *camera, char *src, int src_size, int **dest)
 				return GP_ERROR_CORRUPTED_DATA;
 			}
 		}
-		ret = tinyjpeg_decode (camera->pl->jdec);
+		ret = ax203_tinyjpeg_decode (camera->pl->jdec);
 		if (ret) {
 			gp_log (GP_LOG_ERROR, "ax203",
 				"Error decoding JPEG data: %s",
-				tinyjpeg_get_errorstring (camera->pl->jdec));
+				ax203_tinyjpeg_get_errorstring (camera->pl->jdec));
 			return GP_ERROR_CORRUPTED_DATA;
 		}
-		tinyjpeg_get_components (camera->pl->jdec, components);
+		ax203_tinyjpeg_get_components (camera->pl->jdec, components);
 		for (y = 0; y < camera->pl->height; y++) {
 			for (x = 0; x < camera->pl->width; x++) {
 				dest[y][x] = gdTrueColor (components[0][0],
@@ -1745,7 +1745,7 @@ static void
 ax203_exit(Camera *camera)
 {
 	if (camera->pl->jdec) {
-		tinyjpeg_free (camera->pl->jdec);
+		ax203_tinyjpeg_free (camera->pl->jdec);
 		camera->pl->jdec = NULL;
 	}
 	free (camera->pl->mem);

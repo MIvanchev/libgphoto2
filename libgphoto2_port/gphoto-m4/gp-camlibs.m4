@@ -470,16 +470,20 @@ GP_SET_EQUAL_IFELSE([camlib-set], [camlib-set-standard], [dnl
 ])dnl
 
 m4_pattern_allow([GP_CAMLIB_SET])dnl
+m4_pattern_allow([GP_CAMLIB_SET_LINKER])dnl
 AC_DEFINE_UNQUOTED([GP_CAMLIB_SET], ["${gp_camlib_set}"],
                    [The actually defined set of camlibs to build])
 
 AS_UNSET([GP_CAMLIB_SET])
+AS_UNSET([GP_CAMLIB_SET_LINKER])
 for f in ${gp_camlib_set}
 do
     GP_CAMLIB_SET="${GP_CAMLIB_SET}${GP_CAMLIB_SET+ }${f}.la"
+    GP_CAMLIB_SET_LINKER="${GP_CAMLIB_SET_LINKER}${GP_CAMLIB_SET_LINKER+ }-l:${f}.a"
 done
 AS_UNSET([f])
 AC_SUBST([GP_CAMLIB_SET])
+AC_SUBST([GP_CAMLIB_SET_LINKER])
 
 m4_pattern_allow([GP_CAMLIB_SET_EVERYTHING])dnl
 AC_SUBST([GP_CAMLIB_SET_EVERYTHING],

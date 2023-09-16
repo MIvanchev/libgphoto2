@@ -78,6 +78,7 @@ dnl     compilation.
 dnl
 m4_pattern_forbid([PKG_PROG_PKG_CONFIG])dnl
 m4_pattern_forbid([PKG_CHECK_MODULES])dnl
+m4_pattern_forbid([PKG_CHECK_MODULES_STATIC])dnl
 dnl
 AC_DEFUN([_GP_CHECK_LIBRARY_SOEXT],[dnl
 AC_MSG_CHECKING([for dynamic library extension])
@@ -152,8 +153,8 @@ if test "x${[$1][_LIBS]}" = "x" && test "x${[$1][_CFLAGS]}" = "x"; then
 		if test "x${[have_][$1]}" = "xno"; then
 			# we need that line break after the PKG_CHECK_MODULES
 			m4_ifval([$3],
-				[PKG_CHECK_MODULES([$1],[$2][ $3],[have_][$1][=yes],[:])],
-				[PKG_CHECK_MODULES([$1],[$2],     [have_][$1][=yes],[:])]
+				[PKG_CHECK_MODULES_STATIC([$1],[$2][ $3],[have_][$1][=yes],[:])],
+				[PKG_CHECK_MODULES_STATIC([$1],[$2],     [have_][$1][=yes],[:])]
 			)
 		fi
 		# If pkg-config didn't find anything, try the libfoo-config program
